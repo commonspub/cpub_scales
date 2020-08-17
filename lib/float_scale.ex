@@ -29,7 +29,18 @@ defmodule CommonsPub.Scales.FloatScale.Migration do
   end
 
   defp migrate_float_scale(down) do
-    drop_mixin_table(FloatScale)
+    drop_pointable_table(FloatScale)
+  end
+
+
+  def insert_float_scale(id) do
+    id = Pointers.ULID.cast!(id)
+    Repo.insert_all(FloatScale, [%{id: id}])
+  end
+
+  def delete_float_scale(id) do
+    id = Pointers.ULID.cast!(id)
+    Repo.delete_all(from s in FloatScale, where: id == ^id)
   end
 
 end

@@ -19,6 +19,7 @@ defmodule CommonsPub.Scales.IntScale.Migration do
   import Ecto.Migration
   import Pointers.Migration
   alias CommonsPub.Scales.IntScale
+  import Ecto.Query
 
   @doc """
   Migrates the IntScale table. Direction is autodetected by default.
@@ -31,6 +32,16 @@ defmodule CommonsPub.Scales.IntScale.Migration do
 
   defp migrate_int_scale(:down) do
     drop_pointable_table(IntScale)
+  end
+
+  def insert_int_scale(id) do
+    id = Pointers.ULID.cast!(id)
+    Repo.insert_all(IntScale, [%{id: id}])
+  end
+
+  def delete_int_scale(id) do
+    id = Pointers.ULID.cast!(id)
+    Repo.delete_all(from s in IntScale, where: id == ^id)
   end
 
 end

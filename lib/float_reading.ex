@@ -49,7 +49,7 @@ defmodule CommonsPub.Scales.FloatReading.Migration do
 
   defp migrate_float_reading(index_opts, :down) do
     drop index(FloatReading.__schema__(:source), [:reading], index_opts)
-    drop_mixin_table(FloatReading)
+    drop_pointable_table(FloatReading)
   end
 
 end

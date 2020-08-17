@@ -34,8 +34,7 @@ defmodule CommonsPub.Scales.IntReading.Migration do
   import CommonsPub.Scales.IntScale.Migration, only: [int_scale_table: 0]
   alias CommonsPub.Scales.IntReading
 
-  @doc "The table's source name, as defined in the schema."
-  def int_reading_table(), do: IntReading.__schema__(:source)
+  defp int_reading_table(), do: IntReading.__schema__(:source)
 
   @doc """
   Migrates the IntReading table. Takes optional index options for
@@ -43,16 +42,14 @@ defmodule CommonsPub.Scales.IntReading.Migration do
   """
   def migrate_int_reading(index_opts \\ [], dir \\ direction())
   def migrate_int_reading(index_opts, :up) do
-    create_mixin_table(int_reading_table()) do
-      add strong_pointer(int_scale_table())
-      add :reading, :timestamptz, null: false
+    create_pointable_table(IntReading) do
     end
     create index(int_reading_table(), [:reading], index_opts)
   end
 
   defp migrate_int_reading(index_opts, :down) do
     drop index(int_reading_table(), [:reading], index_opts)
-    drop_mixin_table(int_reading_table())
+    drop_pointable_table(IntReading)
   end
 
 end
